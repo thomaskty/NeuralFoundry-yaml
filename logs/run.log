@@ -1,0 +1,441 @@
+2026-02-20 02:33:39,354 - INFO - ======================================================================
+2026-02-20 02:33:39,354 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:33:39,354 - INFO - ======================================================================
+2026-02-20 02:33:39,354 - INFO - 
+Loading configuration...
+2026-02-20 02:33:39,355 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:33:39,355 - INFO - Initializing database...
+2026-02-20 02:33:39,356 - ERROR - Database initialization failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+2026-02-20 02:33:39,356 - ERROR - 
+Execution failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+Traceback (most recent call last):
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 331, in run_from_yaml
+    await _ensure_db()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 66, in _ensure_db
+    async with engine.begin() as conn:
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 1068, in begin
+    async with conn:
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/base.py", line 121, in __aenter__
+    return await self.start(is_ctxmanager=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 275, in start
+    await greenlet_spawn(self.sync_engine.connect)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3277, in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3301, in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 629, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connection.py", line 2421, in connect
+    return await connect_utils._connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1075, in _connect
+    raise last_error or exceptions.TargetServerAttributeNotMatched(
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1049, in _connect
+    conn = await _connect_addr(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 886, in _connect_addr
+    return await __connect_addr(params, True, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 931, in __connect_addr
+    tr, pr = await connector
+             ^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 802, in _create_ssl_connection
+    tr, pr = await loop.create_connection(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1094, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+OSError: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+2026-02-20 02:35:09,082 - INFO - ======================================================================
+2026-02-20 02:35:09,083 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:35:09,083 - INFO - ======================================================================
+2026-02-20 02:35:09,083 - INFO - 
+Loading configuration...
+2026-02-20 02:35:09,083 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:35:09,083 - INFO - Initializing database...
+2026-02-20 02:35:09,117 - INFO -   Creating extensions (vector, pgcrypto)...
+2026-02-20 02:35:09,123 - INFO -   Creating tables from models...
+2026-02-20 02:35:09,134 - INFO -   Creating regular indexes...
+2026-02-20 02:35:09,139 - INFO -   Creating vector indexes...
+2026-02-20 02:35:09,141 - INFO - Database initialized successfully
+2026-02-20 02:35:09,141 - INFO - 
+User setup:
+2026-02-20 02:35:09,151 - INFO -   User 'demo_user' already exists (ID: 95ea5cfa-df58-4e66-ba26-1aff11e06c3f)
+2026-02-20 02:35:09,152 - INFO - 
+Chat setup:
+2026-02-20 02:35:09,164 - INFO -   Created chat 'YAML Run' (ID: 6b576c0f-0ea7-49e0-b4d6-d83a53bbb1a3)
+2026-02-20 02:35:09,165 - INFO - 
+Knowledge bases:
+2026-02-20 02:35:09,165 - INFO -   [1/1] Processing 'Sample KB'...
+2026-02-20 02:35:09,170 - INFO -     KB 'Sample KB' already exists (ID: 5ad807b5-af8f-429a-9a96-fbb014a142ba)
+2026-02-20 02:35:09,171 - INFO -     Ingesting 1 file(s)...
+2026-02-20 02:35:09,178 - INFO -     [skipped] Document 'dataset.txt' already exists in KB.
+2026-02-20 02:35:09,178 - INFO -     Files ingested successfully
+2026-02-20 02:35:09,178 - INFO - 
+Attaching 1 KB(s) to chat...
+2026-02-20 02:35:09,181 - INFO -   All KBs attached
+2026-02-20 02:35:09,182 - INFO - 
+======================================================================
+2026-02-20 02:35:09,182 - INFO - Session Summary
+2026-02-20 02:35:09,182 - INFO - ======================================================================
+2026-02-20 02:35:09,182 - INFO - User:        demo_user (95ea5cfa-df58-4e66-ba26-1aff11e06c3f)
+2026-02-20 02:35:09,182 - INFO - Chat:        YAML Run (6b576c0f-0ea7-49e0-b4d6-d83a53bbb1a3)
+2026-02-20 02:35:09,182 - INFO - KBs:         1
+2026-02-20 02:35:09,182 - INFO - Attachments: 0
+2026-02-20 02:35:09,182 - INFO - Queries:     1
+2026-02-20 02:35:09,182 - INFO - 
+======================================================================
+2026-02-20 02:35:09,182 - INFO - Processing Queries
+2026-02-20 02:35:09,182 - INFO - ======================================================================
+2026-02-20 02:35:09,182 - INFO - 
+[1/1] Query: What does the document say about PAN cards and their purpose?
+2026-02-20 02:35:15,356 - INFO - 
+======================================================================
+2026-02-20 02:35:15,356 - INFO - Execution completed successfully
+2026-02-20 02:35:15,356 - INFO - ======================================================================
+2026-02-20 02:41:12,994 - INFO - ======================================================================
+2026-02-20 02:41:12,994 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:41:12,994 - INFO - ======================================================================
+2026-02-20 02:41:12,994 - INFO - 
+Loading configuration...
+2026-02-20 02:41:12,995 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:41:12,995 - INFO - Initializing database...
+2026-02-20 02:41:13,040 - INFO -   Creating extensions (vector, pgcrypto)...
+2026-02-20 02:41:13,042 - INFO -   Creating tables from models...
+2026-02-20 02:41:13,050 - INFO -   Creating regular indexes...
+2026-02-20 02:41:13,061 - INFO -   Creating vector indexes...
+2026-02-20 02:41:13,064 - INFO - Database initialized successfully
+2026-02-20 02:41:13,064 - INFO - 
+User setup:
+2026-02-20 02:41:13,074 - INFO -   User 'demo_user' already exists (ID: 95ea5cfa-df58-4e66-ba26-1aff11e06c3f)
+2026-02-20 02:41:13,074 - INFO - 
+Chat setup:
+2026-02-20 02:41:13,077 - INFO -   Chat 'YAML Run' already exists (ID: 6b576c0f-0ea7-49e0-b4d6-d83a53bbb1a3)
+2026-02-20 02:41:13,077 - INFO - 
+Knowledge bases:
+2026-02-20 02:41:13,077 - INFO -   [1/1] Processing 'Sample KB'...
+2026-02-20 02:41:13,081 - INFO -     KB 'Sample KB' already exists (ID: 5ad807b5-af8f-429a-9a96-fbb014a142ba)
+2026-02-20 02:41:13,081 - INFO -     Ingesting 1 file(s)...
+2026-02-20 02:41:13,090 - INFO -     [skipped] Document 'dataset.txt' already exists in KB.
+2026-02-20 02:41:13,090 - INFO -     Files ingested successfully
+2026-02-20 02:41:13,090 - INFO - 
+Attaching 1 KB(s) to chat...
+2026-02-20 02:41:13,092 - INFO -   All KBs attached
+2026-02-20 02:41:13,092 - INFO - 
+======================================================================
+2026-02-20 02:41:13,092 - INFO - Session Summary
+2026-02-20 02:41:13,092 - INFO - ======================================================================
+2026-02-20 02:41:13,092 - INFO - User:        demo_user (95ea5cfa-df58-4e66-ba26-1aff11e06c3f)
+2026-02-20 02:41:13,092 - INFO - Chat:        YAML Run (6b576c0f-0ea7-49e0-b4d6-d83a53bbb1a3)
+2026-02-20 02:41:13,092 - INFO - KBs:         1
+2026-02-20 02:41:13,092 - INFO - Attachments: 0
+2026-02-20 02:41:13,092 - INFO - Queries:     1
+2026-02-20 02:41:13,092 - INFO - 
+======================================================================
+2026-02-20 02:41:13,092 - INFO - Processing Queries
+2026-02-20 02:41:13,092 - INFO - ======================================================================
+2026-02-20 02:41:13,092 - INFO - 
+[1/1] Query: What does the document say about PAN cards and their purpose?
+2026-02-20 02:41:22,597 - INFO - 
+======================================================================
+2026-02-20 02:41:22,597 - INFO - Execution completed successfully
+2026-02-20 02:41:22,597 - INFO - ======================================================================
+2026-02-20 02:54:22,316 - INFO - ======================================================================
+2026-02-20 02:54:22,317 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:54:22,317 - INFO - ======================================================================
+2026-02-20 02:54:22,317 - INFO - 
+Loading configuration...
+2026-02-20 02:54:22,317 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:54:22,317 - INFO - Initializing database...
+2026-02-20 02:54:22,320 - ERROR - Database initialization failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5433), [Errno 61] Connect call failed ('::1', 5433, 0, 0)
+2026-02-20 02:54:22,320 - ERROR - 
+Execution failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5433), [Errno 61] Connect call failed ('::1', 5433, 0, 0)
+Traceback (most recent call last):
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 331, in run_from_yaml
+    await _ensure_db()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 66, in _ensure_db
+    async with engine.begin() as conn:
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 1068, in begin
+    async with conn:
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/base.py", line 121, in __aenter__
+    return await self.start(is_ctxmanager=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 275, in start
+    await greenlet_spawn(self.sync_engine.connect)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3277, in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3301, in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 629, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connection.py", line 2421, in connect
+    return await connect_utils._connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1075, in _connect
+    raise last_error or exceptions.TargetServerAttributeNotMatched(
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1049, in _connect
+    conn = await _connect_addr(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 886, in _connect_addr
+    return await __connect_addr(params, True, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 931, in __connect_addr
+    tr, pr = await connector
+             ^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 802, in _create_ssl_connection
+    tr, pr = await loop.create_connection(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1094, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+OSError: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5433), [Errno 61] Connect call failed ('::1', 5433, 0, 0)
+2026-02-20 02:56:36,852 - INFO - ======================================================================
+2026-02-20 02:56:36,853 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:56:36,853 - INFO - ======================================================================
+2026-02-20 02:56:36,853 - INFO - 
+Loading configuration...
+2026-02-20 02:56:36,853 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:56:36,853 - INFO - Initializing database...
+2026-02-20 02:56:36,855 - ERROR - Database initialization failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+2026-02-20 02:56:36,855 - ERROR - 
+Execution failed: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+Traceback (most recent call last):
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 331, in run_from_yaml
+    await _ensure_db()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/run.py", line 66, in _ensure_db
+    async with engine.begin() as conn:
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 1068, in begin
+    async with conn:
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/base.py", line 121, in __aenter__
+    return await self.start(is_ctxmanager=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 275, in start
+    await greenlet_spawn(self.sync_engine.connect)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3277, in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 3301, in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 447, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 1264, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 711, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 388, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 673, in __init__
+    self.__connect()
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 899, in __connect
+    with util.safe_reraise():
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/pool/base.py", line 895, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/create.py", line 661, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 629, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 955, in connect
+    await_only(creator_fn(*arg, **kw)),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connection.py", line 2421, in connect
+    return await connect_utils._connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1075, in _connect
+    raise last_error or exceptions.TargetServerAttributeNotMatched(
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 1049, in _connect
+    conn = await _connect_addr(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 886, in _connect_addr
+    return await __connect_addr(params, True, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 931, in __connect_addr
+    tr, pr = await connector
+             ^^^^^^^^^^^^^^^
+  File "/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.venv/lib/python3.11/site-packages/asyncpg/connect_utils.py", line 802, in _create_ssl_connection
+    tr, pr = await loop.create_connection(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1094, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+OSError: Multiple exceptions: [Errno 61] Connect call failed ('127.0.0.1', 5432), [Errno 61] Connect call failed ('::1', 5432, 0, 0)
+2026-02-20 02:57:28,787 - INFO - ======================================================================
+2026-02-20 02:57:28,788 - INFO - NeuralFoundry YAML Runner
+2026-02-20 02:57:28,788 - INFO - ======================================================================
+2026-02-20 02:57:28,788 - INFO - 
+Loading configuration...
+2026-02-20 02:57:28,788 - INFO - Loaded configuration from configs/run.yaml
+2026-02-20 02:57:28,788 - INFO - Initializing database...
+2026-02-20 02:57:28,822 - INFO -   Creating extensions (vector, pgcrypto)...
+2026-02-20 02:57:28,824 - INFO -   Creating tables from models...
+2026-02-20 02:57:28,833 - INFO -   Creating regular indexes...
+2026-02-20 02:57:28,839 - INFO -   Creating vector indexes...
+2026-02-20 02:57:28,841 - INFO - Database initialized successfully
+2026-02-20 02:57:28,841 - INFO - 
+User setup:
+2026-02-20 02:57:28,851 - INFO -   User 'demo_user' already exists (ID: 97d37951-aca1-4e04-acb7-5116e8a3b326)
+2026-02-20 02:57:28,852 - INFO - 
+Chat setup:
+2026-02-20 02:57:28,857 - INFO -   Created chat 'YAML Run' (ID: 2978376f-1aa3-422d-a1bb-e9b6ff7e381c)
+2026-02-20 02:57:28,857 - INFO - 
+Knowledge bases:
+2026-02-20 02:57:28,857 - INFO -   [1/1] Processing 'Sample KB'...
+2026-02-20 02:57:28,859 - INFO -     KB 'Sample KB' already exists (ID: 0ec56be2-ec68-4fc5-b736-0d848b42b62e)
+2026-02-20 02:57:28,859 - INFO -     Ingesting 1 file(s)...
+2026-02-20 02:57:28,863 - INFO -     [skipped] Document 'dataset.txt' already exists in KB.
+2026-02-20 02:57:28,863 - INFO -     Files ingested successfully
+2026-02-20 02:57:28,863 - INFO - 
+Attaching 1 KB(s) to chat...
+2026-02-20 02:57:28,866 - INFO -   All KBs attached
+2026-02-20 02:57:28,866 - INFO - 
+======================================================================
+2026-02-20 02:57:28,866 - INFO - Session Summary
+2026-02-20 02:57:28,866 - INFO - ======================================================================
+2026-02-20 02:57:28,866 - INFO - User:        demo_user (97d37951-aca1-4e04-acb7-5116e8a3b326)
+2026-02-20 02:57:28,866 - INFO - Chat:        YAML Run (2978376f-1aa3-422d-a1bb-e9b6ff7e381c)
+2026-02-20 02:57:28,866 - INFO - KBs:         1
+2026-02-20 02:57:28,866 - INFO - Attachments: 0
+2026-02-20 02:57:28,866 - INFO - Queries:     1
+2026-02-20 02:57:28,866 - INFO - 
+======================================================================
+2026-02-20 02:57:28,866 - INFO - Processing Queries
+2026-02-20 02:57:28,866 - INFO - ======================================================================
+2026-02-20 02:57:28,866 - INFO - 
+[1/1] Query: What does the document say about PAN cards and their purpose?
+2026-02-20 02:57:33,178 - INFO - 
+======================================================================
+2026-02-20 02:57:33,179 - INFO - Execution completed successfully
+2026-02-20 02:57:33,179 - INFO - ======================================================================

@@ -1,7 +1,7 @@
 services:
   db:
     image: pgvector/pgvector:pg16
-    container_name: nf-postgres
+    container_name: nf-yaml-postgres
     restart: unless-stopped
     env_file:
       - .env
@@ -12,16 +12,31 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - nf_pgdata:/var/lib/postgresql/data
+      - nf_yaml_pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
+  app:
+    build: .
+    container_name: nf-yaml-runner
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: db
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - ./:/app
+    command: ["python", "run.py", "configs/with_attachments.yaml"]
+
   pgadmin:
     image: dpage/pgadmin4
-    container_name: nf-pgadmin
+    container_name: nf-yaml-pgadmin
     restart: unless-stopped
     logging:
       driver: "none"
@@ -37,4 +52,4 @@ services:
       - ./pgadmin/servers.json:/pgadmin4/servers.json
 
 volumes:
-  nf_pgdata:
+  nf_yaml_pgdata:

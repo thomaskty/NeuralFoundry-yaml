@@ -1,0 +1,25 @@
+user:
+  username: "demo_user"
+
+chat:
+  title: "Multiple KBs"
+  system_prompt: "Use the most relevant KB context."
+
+knowledge_bases:
+  - title: "Banking Guide"
+    description: "Banking policies and FAQs"
+    files:
+      - path: "documents/banking_guide.txt"
+
+  - title: "Technical Docs"
+    description: "Technical reference material"
+    files:
+      - path: "documents/technical_docs.txt"
+
+attachments: []
+
+messages:
+  - "From the banking guide, list the main topics covered."
+  - "From the technical docs, summarize the core sections."
+
+output_file: true

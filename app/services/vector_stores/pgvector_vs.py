@@ -199,33 +199,34 @@ class PgVectorStore:
 
         vec_literal = _vec_literal(vec)
 
-        # Build WHERE clause for KB filtering
         kb_filter = "', '".join(kb_ids)
-        where_clause = f"WHERE c.kb_id IN ('{kb_filter}')"
+        where_clause = f"WHERE l.kb_id IN ('{kb_filter}')"
 
         if threshold is not None:
-            where_clause += f" AND 1 - (c.embedding <=> '{vec_literal}'::vector) >= {threshold}"
+            where_clause += f" AND 1 - (g.embedding <=> '{vec_literal}'::vector) >= {threshold}"
 
         # Use ROW_NUMBER() to limit results per KB
         sql = f"""
             WITH ranked_chunks AS (
                 SELECT 
-                    c.id,
-                    c.kb_id,
-                    c.document_id,
-                    c.chunk_index,
-                    c.text,
-                    c.token_count,
-                    d.filename,
+                    g.id,
+                    l.kb_id,
+                    l.document_id,
+                    g.chunk_index,
+                    g.text,
+                    g.token_count,
+                    gd.filename,
                     k.title as kb_title,
-                    1 - (c.embedding <=> '{vec_literal}'::vector) AS similarity,
+                    1 - (g.embedding <=> '{vec_literal}'::vector) AS similarity,
                     ROW_NUMBER() OVER (
-                        PARTITION BY c.kb_id 
-                        ORDER BY 1 - (c.embedding <=> '{vec_literal}'::vector) DESC
+                        PARTITION BY l.kb_id 
+                        ORDER BY 1 - (g.embedding <=> '{vec_literal}'::vector) DESC
                     ) as rank
-                FROM kb_chunks c
-                JOIN kb_documents d ON c.document_id = d.id
-                JOIN knowledge_bases k ON c.kb_id = k.id
+                FROM kb_chunk_links l
+                JOIN kb_documents d ON l.document_id = d.id
+                JOIN global_documents gd ON d.global_document_id = gd.id
+                JOIN global_chunks g ON l.global_chunk_id = g.id
+                JOIN knowledge_bases k ON l.kb_id = k.id
                 {where_clause}
             )
             SELECT 
@@ -327,10 +328,6 @@ class PgVectorStore:
         async with engine.begin() as conn:
             result = await conn.exec_driver_sql(sql)
             rows = result.mappings().all()
-
-            print(f"🐛 Attachment Search - Found {len(rows)} chunks")
-            if rows:
-                print(f"🐛 Attachment Search - Top similarity: {rows[0]['similarity']:.4f}")
 
             # Build metadata dict for compatibility with chat_pipelines
             results = []

@@ -1,0 +1,16 @@
+user:
+  username: "demo_user"
+
+chat:
+  title: "Attachments Only"
+  system_prompt: "Use only attachment context."
+
+knowledge_bases: []
+
+attachments:
+  - path: "documents/technical_docs.txt"
+
+messages:
+  - "Summarize the attached document."
+
+output_file: true

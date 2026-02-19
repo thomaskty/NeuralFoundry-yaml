@@ -1,0 +1,21 @@
+user:
+  username: "demo_user"
+
+chat:
+  title: "With Attachments"
+  system_prompt: "Use both KB and attachment context."
+
+knowledge_bases:
+  - title: "Sample KB"
+    description: "Baseline reference docs"
+    files:
+      - path: "documents/dataset.txt"
+
+attachments:
+  - path: "documents/technical_docs.txt"
+  - path: "documents/banking_guide.txt"
+
+messages:
+  - "explain banking process"
+
+output_file: true

@@ -1,5 +1,6 @@
 # app/services/pipelines/chat_pipelines.py
 import asyncio
+import logging
 from typing import Optional, List, Dict
 from datetime import datetime, timezone
 from openai import AsyncOpenAI
@@ -10,6 +11,7 @@ from app.services.wrappers.async_embedding import get_embedding_async
 # Initialize components (module-level singletons)
 _pgv = PgVectorStore()
 _openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+logger = logging.getLogger(__name__)
 
 
 def _format_relative_time(created_at) -> str:
@@ -115,7 +117,7 @@ def _build_hybrid_context(
             filename = chunk.get("metadata", {}).get("filename", "Unknown file")
             similarity = chunk.get("similarity", 0)
 
-            context_parts.append(f"📎 From attached file: \"{filename}\"")
+            context_parts.append(f"From attached file: \"{filename}\"")
             context_parts.append(f"   Similarity: {similarity:.2f}")
             context_parts.append("")
             context_parts.append(chunk['text'])
@@ -133,7 +135,7 @@ def _build_hybrid_context(
             filename = chunk.get("filename", "Unknown")
             similarity = chunk.get("similarity", 0)
 
-            context_parts.append(f"📚 From: \"{filename}\" (KB: {kb_title})")
+            context_parts.append(f"From: \"{filename}\" (KB: {kb_title})")
             context_parts.append(f"   Similarity: {similarity:.2f}")
             context_parts.append("")
             context_parts.append(chunk['text'])
@@ -173,13 +175,6 @@ async def generate_response_with_kb(
     older_retrieval = older_retrieval or settings.OLDER_MESSAGE_RETRIEVAL
     max_kb_per_kb = max_kb_per_kb or settings.MAX_KB_CHUNKS_PER_KB
 
-    # 🐛 DEBUG: Print query
-    print(f"\n{'=' * 60}")
-    print(f"🐛 NEW QUERY: {user_text}")
-    print(f"🐛 Chat ID: {chat_id}")
-    print(f"🐛 KB Threshold: {kb_chunk_threshold}")
-    print(f"{'=' * 60}\n")
-
     # 1. Generate embedding for user query
     user_emb = await get_embedding_async(user_text)
 
@@ -196,10 +191,6 @@ async def generate_response_with_kb(
 
     # 4. Get attached KB IDs
     kb_ids = await _pgv.get_attached_kb_ids(chat_id)
-
-    # 🐛 DEBUG: Print KB attachment info
-    print(f"🐛 Attached KB IDs: {kb_ids}")
-    print(f"🐛 Number of KBs attached: {len(kb_ids)}")
 
     # 5. Parallel fetch: Recent messages + Older messages + KB chunks + Attachments (NEW)
     recent_messages, older_messages, kb_results, attachment_results = await asyncio.gather(
@@ -218,54 +209,16 @@ async def generate_response_with_kb(
 
     # Handle errors
     if isinstance(recent_messages, Exception):
-        print(f"❌ Error fetching recent messages: {recent_messages}")
         recent_messages = []
 
     if isinstance(older_messages, Exception):
-        print(f"❌ Error fetching older messages: {older_messages}")
         older_messages = []
 
     if isinstance(kb_results, Exception):
-        print(f"❌ Error fetching KB chunks: {kb_results}")
         kb_results = []
 
     if isinstance(attachment_results, Exception):
-        print(f"❌ Error fetching attachments: {attachment_results}")
         attachment_results = []
-
-    # 🐛 DEBUG: Print retrieval results
-    print(f"\n{'=' * 60}")
-    print(f"🐛 RETRIEVAL RESULTS:")
-    print(f"   - Recent messages: {len(recent_messages)}")
-    print(f"   - Older messages: {len(older_messages)}")
-    print(f"   - KB chunks: {len(kb_results)}")
-    print(f"   - Attachment chunks: {len(attachment_results)}")  # NEW
-
-    if kb_results:
-        print(f"\n🐛 KB RESULTS:")
-        for i, chunk in enumerate(kb_results[:3]):
-            print(f"   [{i + 1}] Similarity: {chunk.get('similarity', 0):.4f}")
-            print(f"       KB: {chunk.get('kb_title', 'Unknown')}")
-            print(f"       File: {chunk.get('filename', 'Unknown')}")
-            print(f"       Text preview: {chunk['text'][:100]}...")
-    else:
-        print(f"   ⚠️  NO KB RESULTS FOUND!")
-        if kb_ids:
-            print(f"   ⚠️  KBs are attached but no chunks matched threshold {kb_chunk_threshold}")
-        else:
-            print(f"   ⚠️  No KBs are attached to this chat!")
-
-    # NEW: Debug attachment results
-    if attachment_results:
-        print(f"\n🐛 ATTACHMENT RESULTS:")
-        for i, chunk in enumerate(attachment_results[:3]):
-            print(f"   [{i + 1}] Similarity: {chunk.get('similarity', 0):.4f}")
-            print(f"       File: {chunk.get('metadata', {}).get('filename', 'Unknown')}")
-            print(f"       Text preview: {chunk['text'][:100]}...")
-    else:
-        print(f"   ℹ️  No attachments found in this chat")
-
-    print(f"{'=' * 60}\n")
 
     # 6. Build structured context (now includes attachments)
     system_content = _build_hybrid_context(
@@ -290,8 +243,8 @@ async def generate_response_with_kb(
         )
         assistant_reply = response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"❌ Error generating response: {e}")
-        assistant_reply = "I apologize, but I encountered an error generating a response."
+        logger.error(f"Error generating response: {e}")
+        assistant_reply = "I encountered an error generating a response."
 
     # 8. Prepare metadata (now includes attachments)
     kb_sources = []

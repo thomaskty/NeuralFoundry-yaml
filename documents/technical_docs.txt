@@ -1,0 +1,197 @@
+# Technical Documentation - NeuralFoundry RAG Platform
+
+## Overview
+
+NeuralFoundry is an advanced Retrieval-Augmented Generation (RAG) platform designed to provide accurate, context-aware responses by combining large language models with document retrieval capabilities.
+
+## Architecture
+
+### Components
+
+1. **Document Ingestion Layer**
+   - Supports multiple file formats (PDF, DOCX, TXT, HTML, Images)
+   - Intelligent document chunking using Docling
+   - Automatic metadata extraction
+   - Batch processing capabilities
+
+2. **Embedding Service**
+   - Uses OpenAI's text-embedding-3-small model
+   - 1536-dimensional vector embeddings
+   - Batch embedding generation for performance
+   - Caching for frequently used embeddings
+
+3. **Vector Store**
+   - PostgreSQL with pgvector extension
+   - IVFFlat indexing for similarity search
+   - Support for cosine distance metrics
+   - Scalable to millions of embeddings
+
+4. **LLM Integration**
+   - Integration with OpenAI API (GPT-4o-mini model)
+   - Configurable temperature and max tokens
+   - Token limit management
+   - Context window optimization
+
+5. **Chat Pipeline**
+   - Hybrid retrieval using multiple strategies
+   - Recent message context retrieval
+   - Knowledge base chunk retrieval
+   - Dynamic prompt construction
+
+## Configuration
+
+### Environment Variables
+
+```
+POSTGRES_USER=neuralf
+POSTGRES_PASSWORD=secure_password
+POSTGRES_DB=neuralf_db
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+OPENAI_API_KEY=your-api-key
+```
+
+### RAG Parameters
+
+- **KB_CHUNK_SIZE**: 800 characters per chunk
+- **KB_CHUNK_OVERLAP**: 100 characters overlap
+- **RECENT_MESSAGE_WINDOW**: Last 20 messages
+- **OLDER_MESSAGE_RETRIEVAL**: 20 historical messages
+- **MAX_KB_CHUNKS_PER_KB**: 20 chunks per knowledge base
+- **KB_CHUNK_THRESHOLD**: 0.1 similarity threshold
+
+## Database Schema
+
+### Users Table
+- Stores user information
+- Relationships with chat sessions and knowledge bases
+- Unique username constraint
+
+### Chat Sessions Table
+- Represents individual chat conversations
+- Links to user and system prompt
+- Relationships with messages and knowledge bases
+
+### Knowledge Bases Table
+- Persistent document collections
+- Owned by users
+- Contains metadata and descriptions
+
+### Chat Messages Table
+- Individual messages in conversations
+- Stores role (user/assistant), content, and embeddings
+- Indexed for fast retrieval
+
+### KB Documents Table
+- Documents within knowledge bases
+- File metadata and content hash
+- Upload tracking
+
+### KB Chunks Table
+- Individual chunks of documents
+- Stored with embeddings
+- Metadata about source document and section
+- Optimized for vector similarity search
+
+## API Endpoints
+
+### User Management
+- `GET /users/{user_id}` - Get user info
+- `POST /users` - Create new user
+
+### Chat Operations
+- `POST /chats` - Create chat session
+- `GET /chats/{chat_id}` - Get chat details
+- `POST /chats/{chat_id}/messages` - Send message
+
+### Knowledge Base Operations
+- `POST /kbs` - Create knowledge base
+- `POST /kbs/{kb_id}/documents` - Upload document
+- `GET /kbs/{kb_id}/documents` - List documents
+
+## Running with YAML Configuration
+
+### Basic Usage
+
+```bash
+python run.py run.yaml
+```
+
+### Configuration File Format
+
+```yaml
+user:
+  username: "test_user"
+
+chat:
+  title: "Chat Session Title"
+  system_prompt: "Custom system prompt"
+
+knowledge_bases:
+  - title: "KB Name"
+    description: "KB Description"
+    files:
+      - path: "documents/file.txt"
+
+messages:
+  - "Question 1"
+  - "Question 2"
+```
+
+## Performance Considerations
+
+1. **Vector Index**: IVFFlat indexing with 100 lists optimized for 1-10M embeddings
+2. **Query Optimization**: Multiple indexes on foreign keys and frequently searched fields
+3. **Batch Processing**: Bulk embedding generation reduces API calls
+4. **Caching**: Embeddings cached to avoid regeneration
+5. **Connection Pooling**: Async database connections with pool management
+
+## Security Features
+
+- SQL injection prevention through parameterized queries
+- API key management
+- User isolation at database level
+- Secure password hashing for future user authentication
+- Environment variable-based configuration
+
+## Troubleshooting
+
+### Common Issues
+
+1. **No module named 'pgvector'**
+   - Install: `pip install pgvector`
+
+2. **Connection refused to PostgreSQL**
+   - Ensure Docker container is running
+   - Check credentials in .env file
+   - Verify port 5432 is accessible
+
+3. **OpenAI API errors**
+   - Verify API key is set correctly
+   - Check API quota and billing
+   - Ensure correct model name
+
+4. **Vector index not created**
+   - Ensure pgvector extension is installed
+   - Check database permissions
+   - Review Docker logs
+
+## Best Practices
+
+1. Use meaningful knowledge base titles and descriptions
+2. Chunk documents appropriately (500-1000 chars recommended)
+3. Regularly update system prompts for consistency
+4. Monitor vector index size and performance
+5. Back up PostgreSQL data regularly
+6. Use environment variables for sensitive configuration
+7. Review logs in neural_foundry_run.log
+
+## Future Enhancements
+
+- Support for Hugging Face embeddings
+- Integration with more LLM providers
+- Hybrid search combining BM25 and vector search
+- Document summarization pipeline
+- Real-time streaming responses
+- Multi-language support
+- Custom fine-tuned embedding models

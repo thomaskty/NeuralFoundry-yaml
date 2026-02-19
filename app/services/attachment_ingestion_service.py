@@ -1,14 +1,24 @@
 # app/services/attachment_ingestion_service.py
 import os
-import aiofiles
+import hashlib
 from datetime import datetime, timezone
-from sqlalchemy.future import select
+import logging
 from app.db.database import AsyncSessionLocal
 from app.db.models import ChatAttachment, ChatAttachmentChunk
 from app.services.wrappers.async_embedding import get_batch_embeddings_async
 from app.services.ingestion.document_processor import DocumentProcessor
 
 _document_processor = DocumentProcessor()
+logger = logging.getLogger(__name__)
+
+
+def _compute_text_hash(file_path: str, original_filename: str) -> str:
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return hashlib.sha256(content.encode("utf-8")).hexdigest()
+    except Exception:
+        return hashlib.sha256(original_filename.encode()).hexdigest()
 
 
 async def process_chat_attachment(chat_id: str, file_path: str, original_filename: str, user_id: str):
@@ -23,6 +33,7 @@ async def process_chat_attachment(chat_id: str, file_path: str, original_filenam
             mime_type = _detect_mime_type(original_filename)
 
             # 2. Create ChatAttachment entry
+            file_hash = _compute_text_hash(file_path, original_filename)
             attachment = ChatAttachment(
                 chat_id=chat_id,
                 user_id=user_id,
@@ -30,6 +41,7 @@ async def process_chat_attachment(chat_id: str, file_path: str, original_filenam
                 mime_type=mime_type,
                 file_size=file_size,
                 processing_status="processing",
+                file_metadata={"sha256": file_hash, "source": original_filename},
                 uploaded_at=datetime.now(timezone.utc),
             )
             db.add(attachment)
@@ -38,9 +50,9 @@ async def process_chat_attachment(chat_id: str, file_path: str, original_filenam
             attachment_id = attachment.id
 
             # 3. Process file with Docling
-            print(f"Processing chat attachment: {original_filename}")
+            logger.info(f"Processing chat attachment: {original_filename}")
             chunks = await _document_processor.process_file(file_path)
-            print(f"Extracted {len(chunks)} chunks from attachment")
+            logger.info(f"Extracted {len(chunks)} chunks from attachment")
 
             if not chunks:
                 attachment.processing_status = "failed"
@@ -80,14 +92,14 @@ async def process_chat_attachment(chat_id: str, file_path: str, original_filenam
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-            print(f"✅ Processed chat attachment: {original_filename} ({len(chunk_objects)} chunks)")
+            logger.info(f"Processed chat attachment: {original_filename} ({len(chunk_objects)} chunks)")
 
         except Exception as e:
             await db.rollback()
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-            print(f"❌ Error processing chat attachment {original_filename}: {e}")
+            logger.error(f"Error processing chat attachment {original_filename}: {e}")
             import traceback
             traceback.print_exc()
 

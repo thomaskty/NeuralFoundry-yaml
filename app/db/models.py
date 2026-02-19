@@ -136,33 +136,58 @@ class KBDocument(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
     kb_id = Column(UUID(as_uuid=True), ForeignKey("knowledge_bases.id", ondelete="CASCADE"), nullable=False)
+    global_document_id = Column(UUID(as_uuid=True), ForeignKey("global_documents.id", ondelete="CASCADE"), nullable=False)
     uploaded_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    kb = relationship("KnowledgeBase", back_populates="documents")
+    global_document = relationship("GlobalDocument")
+    chunk_links = relationship("KBChunkLink", back_populates="document", cascade="all, delete-orphan")
+
+
+# -------------------------------------------------------------------------
+# GLOBAL DOCUMENT CACHE (CROSS-KB DEDUPE)
+# -------------------------------------------------------------------------
+class GlobalDocument(Base):
+    __tablename__ = "global_documents"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
     filename = Column(String, nullable=True)
     mime_type = Column(String, nullable=True)
-    text_sha256 = Column(String, index=True, nullable=False)
+    text_sha256 = Column(String, unique=True, index=True, nullable=False)
     text_size = Column(Integer, nullable=True)
     doc_metadata = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    kb = relationship("KnowledgeBase", back_populates="documents")
-    chunks = relationship("KBChunk", back_populates="document", cascade="all, delete-orphan")
+    chunks = relationship("GlobalChunk", back_populates="document", cascade="all, delete-orphan")
 
 
-class KBChunk(Base):
-    __tablename__ = "kb_chunks"
+class GlobalChunk(Base):
+    __tablename__ = "global_chunks"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
+    document_id = Column(UUID(as_uuid=True), ForeignKey("global_documents.id", ondelete="CASCADE"), nullable=False)
+    chunk_index = Column(Integer, nullable=False)
+    text = Column(Text, nullable=False)
+    token_count = Column(Integer, nullable=True)
+    embedding = Column(Vector(1536), nullable=True)
+    chunk_metadata = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    document = relationship("GlobalDocument", back_populates="chunks")
+
+
+class KBChunkLink(Base):
+    __tablename__ = "kb_chunk_links"
 
     id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
     kb_id = Column(UUID(as_uuid=True), ForeignKey("knowledge_bases.id", ondelete="CASCADE"), nullable=False)
     document_id = Column(UUID(as_uuid=True), ForeignKey("kb_documents.id", ondelete="CASCADE"), nullable=False)
-    chunk_index = Column(Integer, nullable=False)
-    text = Column(Text, nullable=False)
-    token_count = Column(Integer, nullable=True)
-    embedding = Column(Vector(1536), nullable=True)  # Changed: 384 → 1536
-    chunk_metadata = Column(JSON, nullable=True)  # NEW: Added metadata
-    indexed = Column(Boolean, default=False, nullable=False)
+    global_chunk_id = Column(UUID(as_uuid=True), ForeignKey("global_chunks.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    document = relationship("KBDocument", back_populates="chunks")
+    document = relationship("KBDocument", back_populates="chunk_links")
+    global_chunk = relationship("GlobalChunk")
 
 
 # -------------------------------------------------------------------------

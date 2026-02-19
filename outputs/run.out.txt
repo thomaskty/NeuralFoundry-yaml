@@ -1,0 +1,13 @@
+# NeuralFoundry Run Output
+Source YAML: configs/run.yaml
+
+## Query 1
+What does the document say about PAN cards and their purpose?
+
+## Answer 1
+The PAN card, or Permanent Account Number card, is a unique ten-digit alphanumeric identification number issued by the Income Tax Department of India. Its primary purpose is to track tax-related transactions of individuals and entities. In India, a PAN card is mandatory for various financial transactions, including opening a bank account, buying or selling property, and filing income tax returns.
+
+All individuals and entities earning taxable income in India are required to have a PAN card. There are two types of PAN cards available: the e-PAN card, which is a digital format that can be downloaded online, and the physical PAN card, which is a laminated card sent to the applicant's registered address.
+
+For Non-Resident Indians (NRIs), while having a PAN card is not mandatory unless they have income in India or intend to make financial transactions like investing in stocks or purchasing property, it is essential for filing income tax returns. In summary, the PAN card serves as a crucial identification document for tax purposes and various financial activities in India.
+

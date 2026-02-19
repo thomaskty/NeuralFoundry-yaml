@@ -1,0 +1,29 @@
+# NeuralFoundry Run Output
+Source YAML: configs/with_attachments.yaml
+
+## Query 1
+explain banking process
+
+## Answer 1
+The banking process involves several key functions and services that banks provide to individuals and businesses to manage their money. Here’s a breakdown of the main aspects:
+
+1. **Account Opening**: To start banking, customers typically open an account, such as a savings or current account. This requires submitting identification and address proof, along with a photograph. Banks often have specific requirements and documentation needed for this process.
+
+2. **Deposits and Withdrawals**: Once the account is opened, customers can deposit money into their accounts through various means, such as cash deposits at the bank, direct transfers, or mobile banking. Withdrawals can be made through ATMs, bank branches, or online transfers.
+
+3. **Loans and Credit**: Banks offer various loan products, including personal, home, and auto loans. The process involves applying for the loan, where the bank assesses the applicant's creditworthiness, income, and repayment ability. If approved, the funds are disbursed to the customer.
+
+4. **Online Banking**: Most banks provide online banking services that allow customers to manage their accounts remotely. This includes checking balances, transferring funds, paying bills, and monitoring transactions 24/7.
+
+5. **Investment Services**: Banks also offer investment products such as mutual funds, stocks, and bonds. Customers can invest their money to earn returns over time, and banks may provide advice or management services for these investments.
+
+6. **Remittance Services**: Banks facilitate money transfers both domestically and internationally. This includes sending money to family or businesses in different locations, often through wire transfers or online platforms.
+
+7. **Fees and Charges**: Banks typically have various fees associated with their services, such as annual maintenance charges, ATM withdrawal fees, and charges for additional services like cheque books.
+
+8. **Security Measures**: Banks implement several security protocols to protect customer information and transactions. This includes SSL encryption, multi-factor authentication, and transaction alerts.
+
+9. **Regulatory Compliance**: Banks must comply with regulations set by financial authorities, ensuring they operate within legal frameworks to protect customers and maintain financial stability.
+
+Overall, the banking process is designed to facilitate financial transactions, provide access to credit, and help customers manage their finances efficiently.
+

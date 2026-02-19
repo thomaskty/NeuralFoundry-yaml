@@ -5,6 +5,7 @@ Supports multiple file formats: PDF, images, Word docs, HTML, etc.
 """
 
 import os
+import logging
 from typing import List, Dict, Any
 from docling.document_converter import DocumentConverter
 from app.core.config import settings
@@ -170,7 +171,7 @@ class DocumentProcessor:
                 })
 
         except Exception as e:
-            print(f"Fallback extraction error: {e}")
+            logging.getLogger(__name__).error(f"Fallback extraction error: {e}")
             # Last resort: return whole text as one chunk
             try:
                 text = document.export_to_text()
@@ -185,7 +186,7 @@ class DocumentProcessor:
                         }
                     })
             except Exception as e2:
-                print(f"Final fallback failed: {e2}")
+                logging.getLogger(__name__).error(f"Final fallback failed: {e2}")
 
         return chunks
 

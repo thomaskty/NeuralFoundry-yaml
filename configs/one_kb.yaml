@@ -1,0 +1,20 @@
+user:
+  username: "demo_user"
+
+chat:
+  title: "One KB"
+  system_prompt: "Answer using the KB context."
+
+knowledge_bases:
+  - title: "Company Docs"
+    description: "Policies and internal docs"
+    replace_if_changed: true
+    files:
+      - path: "documents/dataset.txt"
+
+attachments: []
+
+messages:
+  - "Summarize the key points from the KB document."
+
+output_file: true

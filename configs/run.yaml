@@ -1,0 +1,21 @@
+user:
+  username: "demo_user"
+
+chat:
+  title: "YAML Run"
+  system_prompt: "You are a helpful assistant. Use the provided context when available."
+
+knowledge_bases:
+  - title: "Sample KB"
+    description: "Sample documents for a basic run"
+    replace_if_changed: true
+    files:
+      - path: "documents/dataset.txt"
+
+attachments: []
+
+messages:
+  - "What does the document say about PAN cards and their purpose?"
+
+# If true, writes outputs to outputs/<yaml_name>.out.txt
+output_file: true

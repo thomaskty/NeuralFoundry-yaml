@@ -1,149 +1,120 @@
-# NeuralFoundry
+# NeuralFoundry YAML Runner
 
-## Overview
-### 1. Multi-user Support
-- Each user has a unique ID and profile.
-- Users can create, view, and manage multiple chat sessions.
+NeuralFoundry is a YAML-driven RAG pipeline that ingests knowledge bases and chat attachments into Postgres + pgvector, then runs one or more queries and prints answers in the terminal (and optionally to an output file). This repo is intentionally simple and CLI-first.
 
-### 2. Chat Sessions
-- Each user can create multiple chat sessions.
-- Each chat session stores metadata (`title`, `created_at`) and is linked to its creator.
+## Folder Layout
+- `configs/` YAML run files
+- `documents/` sample inputs (optional)
+- `outputs/` generated answers (one file per run)
+- `logs/` run logs (one file per run)
 
-### 3. Message Memory & Context
-- Chat messages (user + assistant) are stored in the database.
-- Each message is converted into a **vector embedding** using OpenAI embeddings (`text-embedding-3-small`, 1536 dims).
+## Requirements
+- Python 3.11+ for local runs
+- Docker Desktop (for Postgres + pgAdmin)
+- OpenAI API key
 
-### 4. Contextual Response Generation
-- When a user sends a query, the system:
-  1. Retrieves **top similar past messages** from that chat session via vector similarity search.
-  2. Passes retrieved conversation snippets as context to the LLM.
-  3. Generates an assistant response based on the context, maintaining chat continuity.
+## Setup
 
-### 5. Routers & API
-- **User Router:** Create users, fetch user info, list user chats.
-- **Chat Router:** Create chats (user-linked or generic), send messages, fetch messages, delete chats, list all chats.
-- Clear RESTful hierarchy:
-  - `/users/{user_id}/chats` → user-specific chats
-  - `/chats/{chat_id}` → chat-specific operations
-
-### 6. Database & Storage
-- PostgreSQL used as the main DB.
-- Vector embeddings stored using `pgvector`.
-- `ChatSession` ↔ `User` relationship implemented.
-- `ChatMessage` ↔ `ChatSession` relationship implemented.
-
----
-
-## Why This Project Matters (For Junior AI Engineers)
-NeuralFoundry is a hands-on, modular RAG playground that shows how real AI systems are built. The code is intentionally organized so you can study or swap components without rewriting the whole stack.
-
-### Techniques Used
-- **Chat Memory**  
-  We store each message (user + assistant) as text + vector embeddings. Retrieval pulls recent messages and semantically similar older messages to keep context.
-
-- **Knowledge Bases (KBs)**  
-  Each KB has documents stored with metadata. We embed chunks and retrieve the most relevant ones at query time.
-
-- **Chat Attachments**  
-  You can attach files directly to a chat. Those files are processed into chunks and stored as embeddings, then used as extra context just for that chat.
-
-- **Chunking Strategy**  
-  - PDFs, docx, images, HTML, etc. are processed using **Docling** for structure-aware chunking.  
-  - `.txt` and `.md` are split directly with overlap (simple, fast, reliable).
-
-- **Retrieval & Similarity Thresholds**  
-  Vector similarity search uses `pgvector`.  
-  Similarity thresholds (e.g., KB chunk threshold) are **configurable in settings**, so you can tune relevance vs. recall without changing code.
-
-### Architecture Patterns Worth Learning
-- **Modular pipelines** (chat pipeline, KB ingestion, attachment ingestion)  
-  Easy to plug in other retrieval strategies: BM25, hybrid search, reranking, etc.
-- **Config‑driven behavior**  
-  Model selection, embedding dimensions, chunk sizes, and thresholds can be adjusted centrally.
-- **Metadata‑rich storage**  
-  We store metadata for chats, KBs, and attachments, which makes analytics and dashboards possible later.
-
-### Tooling Stack
-- **FastAPI** for backend APIs  
-- **OpenAI Python SDK** for chat + embeddings  
-- **PostgreSQL + pgvector** for vector search  
-- **Python CLI** for YAML-based runs  
-- **Docker Compose (optional)** for Postgres + pgAdmin  
-
----
-
-## Ideas You Can Build Next
-- **More Retrieval Methods**  
-  Add BM25, hybrid search, reranking, or query expansion.
-- **Multi‑model Responses**  
-  Generate Response A / Response B from different models (or different prompts) and compare.
-- **User Feedback Loop**  
-  Collect thumbs‑up/down and feed it into evaluation or reranking.
-- **Analytics & Dashboards**  
-  Use the stored metadata to show most used KBs, attachment usage, query patterns, etc.
-- **Agents / MCPs**  
-  Add tools, structured workflows, or multi‑step reasoning with agent frameworks.
-
----
-
-## Python Run (YAML)
-Run the system headless using a YAML config file.
-
-### 1. Set environment variables
-Create or edit `/Users/thomaskuttyreji/Documents/NeuralFoundry/.env`:
+### 1) Configure environment
+Edit `/Users/thomaskuttyreji/Documents/GitHub/NeuralFoundry-yaml/.env`:
 ```env
-POSTGRES_USER=neuralfoundry
-POSTGRES_PASSWORD=neuralfoundry_pw
-POSTGRES_DB=neuralfoundry
+POSTGRES_USER=neuralfoundry_yaml
+POSTGRES_PASSWORD=neuralfoundry_yaml_pw
+POSTGRES_DB=neuralfoundry_yaml_db
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
+# OPENAI_API_KEY=sk-your-key
 ```
 
-Set your OpenAI key in the macOS environment (not in `.env`):
+Set your OpenAI key in your shell (recommended):
 ```bash
 export OPENAI_API_KEY="your_key_here"
 ```
 
-### 2. Install dependencies
+### 2) Install Python dependencies (local runs only)
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Run from YAML
+## Run Options
+
+### Option A: Local run (recommended for development)
+This uses Docker only for the database.
+
 ```bash
-python3 run.py run.example.yaml
+# start db
+docker compose up -d db
+
+# run the yaml
+python run.py configs/run.yaml
 ```
 
-### 4. YAML schema (example)
-See `run.example.yaml` for a complete sample.
+### Option B: Docker run (db + runner)
+This runs the YAML runner inside Docker.
 
----
-
-## Optional Docker (Postgres + pgAdmin)
-Use Docker only for the database + pgAdmin. The app itself runs with Python.
-
-### 1. Set environment variables
-Create or edit `/Users/thomaskuttyreji/Documents/NeuralFoundry/.env`:
-```env
-POSTGRES_USER=neuralfoundry
-POSTGRES_PASSWORD=neuralfoundry_pw
-POSTGRES_DB=neuralfoundry
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-```
-
-### 2. Start Postgres + pgAdmin
 ```bash
-docker compose up -d
+docker compose up --build
 ```
 
-### 3. pgAdmin connection
-- Hostname: `host.docker.internal`
+## Database Connection Details
+
+These are the default credentials used by both local and docker runs:
+
+- Host: `localhost` (from your Mac)
 - Port: `5432`
-- Username: `neuralfoundry`
-- Password: `neuralfoundry_pw`
-- Database: `neuralfoundry`
+- Database: `neuralfoundry_yaml_db`
+- Username: `neuralfoundry_yaml`
+- Password: `neuralfoundry_yaml_pw`
 
+## pgAdmin (Docker)
+If you want to inspect the database in pgAdmin, use these settings:
+
+- Host: `db`
+- Port: `5432`
+- Database: `neuralfoundry_yaml_db`
+- Username: `neuralfoundry_yaml`
+- Password: `neuralfoundry_yaml_pw`
+
+## YAML Configs
+
+Example YAML files are in `configs/`:
+- `configs/run.yaml` (basic)
+- `configs/one_kb.yaml`
+- `configs/multiple_kbs.yaml`
+- `configs/with_attachments.yaml`
+- `configs/attachments_only.yaml`
+
+Minimal example:
+```yaml
+user:
+  username: "demo_user"
+
+chat:
+  title: "YAML Run"
+  system_prompt: "You are a helpful assistant. Use the provided context when available."
+
+knowledge_bases:
+  - title: "Sample KB"
+    description: "Sample documents for a basic run"
+    replace_if_changed: true
+    files:
+      - path: "documents/dataset.txt"
+
+attachments: []
+
+messages:
+  - "What does the document say about PAN cards and their purpose?"
+
+output_file: true
+```
+
+## Output Files and Logs
+- Logs: `logs/<yaml_name>.log`
+- Outputs: `outputs/<yaml_name>.out.txt`
+
+## Notes
+- Knowledge base documents are cached globally by content hash, so reusing the same file across KBs does not re-chunk.
+- If you edit a file and want it reprocessed, set `replace_if_changed: true` in that KB entry.
 
