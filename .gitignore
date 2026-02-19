@@ -1,0 +1,16 @@
+__pycache__/
+*.pyo
+*.pyd
+*.env
+.venv/
+venv/
+env/
+dist/
+build/
+.pytest_cache/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.sqlite3
+
