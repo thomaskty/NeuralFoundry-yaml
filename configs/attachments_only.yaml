@@ -11,6 +11,6 @@ attachments:
   - path: "documents/technical_docs.txt"
 
 messages:
-  - "Summarize the attached document."
+  - "Summarize the attached document in a nice way"
 
 output_file: true
